@@ -48,7 +48,7 @@ Week 1 to 3 notebooks: https://github.com/zubedaraheem1307-design/applied-ai-pro
 
 App repository: https://github.com/zubedaraheem1307-design/churn-risk-advisor
 
-## Write it
+## Reflections on Parts 1 to 3
 
 ### Part 1: skew demo, parity, what-if
 I scored one customer with a two-year contract in two ways. With the Week 3 feature code (drop_first=True), the model gave P(churn) = 0.133. With my serving encoder, it gave 0.012. The reason is that a single row contains only one Contract value, so drop_first removes it and both Contract columns become 0. The model then treats the customer as Month-to-month, and no error is shown.
@@ -69,7 +69,7 @@ In the what-if table for the riskiest customer (baseline P(churn) = 0.942), swit
 
 Streamlit's Advanced settings defaulted to Python 3.14, but I trained the model with scikit-learn 1.6.1 and XGBoost 3.2.0, so I changed Python to 3.11 to match the pinned versions. I then opened the app in a private browser window. It loaded without a login, and the batch tab flagged 28 of 50 sample customers, the same as on my laptop.
 
-## Check your understanding
+## Concept Questions
 
 1. When I score a single customer, `drop_first=True` removes the only category present, so both Contract columns become 0 and the model reads the customer as Month-to-month. There is no error, but the prediction is wrong: my two-year customer got 0.133 instead of 0.012.
 
