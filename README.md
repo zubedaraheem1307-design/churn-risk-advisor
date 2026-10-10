@@ -71,14 +71,20 @@ Streamlit's Advanced settings defaulted to Python 3.14, but I trained the model 
 
 ## Concept Questions
 
-1. When I score a single customer, `drop_first=True` removes the only category present, so both Contract columns become 0 and the model reads the customer as Month-to-month. There is no error, but the prediction is wrong: my two-year customer got 0.133 instead of 0.012.
+### 1. Why does get_dummies(drop_first=True) break predictions when scoring a single customer?
+When I score a single customer, `drop_first=True` removes the only category present, so both Contract columns become 0 and the model reads the customer as Month-to-month. There is no error, but the prediction is wrong: my two-year customer got 0.133 instead of 0.012.
 
-2. It compares the model's predictions on the training-style features with its predictions from my serving encoder (`prepare_input`) on the raw data. It has to use every row, because a mismatch might only show up for rare categories or unusual values that a small sample would miss. Mine passed on all 7,043 customers with a largest difference of 0.0.
+### 2. What does the parity test compare, and why must it cover every training row rather than a few?
+It compares the model's predictions on the training-style features with its predictions from my serving encoder (`prepare_input`) on the raw data. It has to use every row, because a mismatch might only show up for rare categories or unusual values that a small sample would miss. Mine passed on all 7,043 customers with a largest difference of 0.0.
 
-3. `st.cache_resource`. The model is one big object that should be loaded once and reused for every click and every user. `st.cache_data` is meant for data such as DataFrames and copies it each time, which does not suit a model.
+### 3. Should the model be loaded with st.cache_resource or st.cache_data? Why?
+`st.cache_resource`. The model is one big object that should be loaded once and reused for every click and every user. `st.cache_data` is meant for data such as DataFrames and copies it each time, which does not suit a model.
 
-4. TotalCharges is basically tenure times monthly charges, so making the user type it is extra work and could produce combinations the model never saw. The app calculates it so the three values always agree.
+### 4. Why does the app derive TotalCharges instead of asking the user to type it?
+TotalCharges is basically tenure times monthly charges, so making the user type it is extra work and could produce combinations the model never saw. The app calculates it so the three values always agree.
 
-5. A model file is tied to the library version that saved it. With a different scikit-learn version, it may fail to load or give different predictions without warning. I pinned scikit-learn 1.6.1 and XGBoost 3.2.0 so the server matches training.
+### 5. Why must requirements.txt pin the exact scikit-learn version used in training?
+A model file is tied to the library version that saved it. With a different scikit-learn version, it may fail to load or give different predictions without warning. I pinned scikit-learn 1.6.1 and XGBoost 3.2.0 so the server matches training.
 
-6. Not necessarily. The model only shows an association: customers who choose two-year contracts may already be more loyal. In my what-if, the risk drops from 0.942 to 0.753. To find out, the company could run an A/B test: offer the contract to a random group of at-risk customers and compare their churn with a control group.
+### 6. Would offering a two-year contract make the customer stay? How could a company find out?
+Not necessarily. The model only shows an association: customers who choose two-year contracts may already be more loyal. In my what-if, the risk drops from 0.942 to 0.753. To find out, the company could run an A/B test: offer the contract to a random group of at-risk customers and compare their churn with a control group.
